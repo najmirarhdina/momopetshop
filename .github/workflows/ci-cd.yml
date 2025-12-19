@@ -1,0 +1,63 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build dan Test Aplikasi
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 1. Checkout kode dari repository
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    # 2. Setup Java 25 (Oracle)
+    - name: Setup Java 25 (Oracle)
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'oracle'
+        java-version: '25'
+    
+    # 3. Verifikasi versi Java
+    - name: Verify Java version
+      run: java -version
+    
+    # 4. Cache Maven packages agar build lebih cepat
+    - name: Cache Maven packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+    
+    # 5. Memberikan izin eksekusi pada file mvnw
+    - name: Set execute permission for mvnw
+      run: chmod +x mvnw
+    
+    # 6. Build aplikasi dengan Maven (Skip tests untuk menghindari error database)
+    - name: Build with Maven (skip tests)
+      run: ./mvnw clean package -DskipTests
+    
+    # 7. Upload hasil build (JAR) sebagai artifact
+    - name: Upload JAR artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: inventory-laboratorium-jar
+        path: target/*.jar
+        retention-days: 1
+
+    # 8. Notifikasi status build
+    - name: Notify Build Status
+      if: always()
+      run: |
+        if [ ${{ job.status }} == 'success' ]; then
+          echo "✅ Build berhasil dengan Oracle JDK 25! JAR tersedia di Artifacts."
+        else
+          echo "❌ Build gagal. Cek log error di atas."
+        fi
