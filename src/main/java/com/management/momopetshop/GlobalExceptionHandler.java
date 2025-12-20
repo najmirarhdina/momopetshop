@@ -1,6 +1,7 @@
 package com.management.momopetshop;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -11,11 +12,23 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     // =============================
+    // REQUEST BODY TIDAK VALID (400)
+    // =============================
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleInvalidRequestBody(HttpMessageNotReadableException ex) {
+        return new ErrorResponse(
+                "INVALID_REQUEST_BODY",
+                "Request body tidak valid atau bukan JSON"
+        );
+    }
+
+    // =============================
     // USER TIDAK DITEMUKAN (404)
     // =============================
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(DataNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleUserNotFound(UserNotFoundException ex) {
+    public ErrorResponse handleUserNotFound(DataNotFoundException ex) {
         return new ErrorResponse(
                 "USER_NOT_FOUND",
                 ex.getMessage()
@@ -25,9 +38,9 @@ public class GlobalExceptionHandler {
     // =============================
     // USER SUDAH ADA (409)
     // =============================
-    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ExceptionHandler(DataAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleUserAlreadyExists(UserAlreadyExistsException ex) {
+    public ErrorResponse handleUserAlreadyExists(DataAlreadyExistsException ex) {
         return new ErrorResponse(
                 "USER_ALREADY_EXISTS",
                 ex.getMessage()
@@ -47,7 +60,7 @@ public class GlobalExceptionHandler {
     }
 
     // =============================
-    // RESPONSE FORMAT
+    // FORMAT RESPONSE ERROR
     // =============================
     public static class ErrorResponse {
         private final String code;
@@ -60,8 +73,16 @@ public class GlobalExceptionHandler {
             this.timestamp = LocalDateTime.now();
         }
 
-        public String getCode() { return code; }
-        public String getMessage() { return message; }
-        public LocalDateTime getTimestamp() { return timestamp; }
+        public String getCode() {
+            return code;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public LocalDateTime getTimestamp() {
+            return timestamp;
+        }
     }
 }

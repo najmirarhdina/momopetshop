@@ -16,21 +16,32 @@ public class SupplierController {
         this.service = service;
     }
 
+    // GET ALL
     @GetMapping
     public List<Supplier> getAll() {
         return service.getAll();
     }
 
+    // GET BY ID
+    @GetMapping("/{id}")
+    public Supplier getById(@PathVariable Integer id) {
+        return service.getById(id);
+    }
+
+    // CREATE
     @PostMapping
     public Supplier create(@RequestBody Supplier supplier) {
         return service.save(supplier);
     }
 
+    // UPDATE
     @PutMapping("/{id}")
-    public Supplier update(@PathVariable Integer id, @RequestBody Supplier supplier) {
+    public Supplier update(@PathVariable Integer id,
+                           @RequestBody Supplier supplier) {
         return service.update(id, supplier);
     }
 
+    // DELETE
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Integer id) {
         service.delete(id);
