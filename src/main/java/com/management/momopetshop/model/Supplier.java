@@ -18,12 +18,27 @@ public class Supplier {
     private String noTelp;
 
     // getter & setter
-    public Integer getIdSupplier() { return idSupplier; }
-    public void setIdSupplier(Integer idSupplier) { this.idSupplier = idSupplier; }
+    public Integer getIdSupplier() {
+        return idSupplier;
+    }
 
-    public String getNamaSupplier() { return namaSupplier; }
-    public void setNamaSupplier(String namaSupplier) { this.namaSupplier = namaSupplier; }
+    public void setIdSupplier(Integer idSupplier) {
+        this.idSupplier = idSupplier;
+    }
 
-    public String getNoTelp() { return noTelp; }
-    public void setNoTelp(String noTelp) { this.noTelp = noTelp; }
+    public String getNamaSupplier() {
+        return namaSupplier;
+    }
+
+    public void setNamaSupplier(String namaSupplier) {
+        this.namaSupplier = namaSupplier;
+    }
+
+    public String getNoTelp() {
+        return noTelp;
+    }
+
+    public void setNoTelp(String noTelp) {
+        this.noTelp = noTelp;
+    }
 }

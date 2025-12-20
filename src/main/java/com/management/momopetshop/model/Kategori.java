@@ -11,10 +11,10 @@ public class Kategori {
     @Column(name = "id_kategori")
     private Integer idKategori;
 
-    @Column(name = "nama_kategori", nullable = false, length = 50)
+    @Column(name = "nama_kategori", nullable = false)
     private String namaKategori;
 
-    // Getter & Setter
+    // getter setter
     public Integer getIdKategori() {
         return idKategori;
     }
@@ -31,4 +31,3 @@ public class Kategori {
         this.namaKategori = namaKategori;
     }
 }
-
