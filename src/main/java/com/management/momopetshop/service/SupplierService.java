@@ -1,6 +1,4 @@
 package com.management.momopetshop.service;
-
-import com.management.momopetshop.SupplierNotFoundException;
 import com.management.momopetshop.model.Supplier;
 import com.management.momopetshop.repository.SupplierRepository;
 import org.springframework.stereotype.Service;

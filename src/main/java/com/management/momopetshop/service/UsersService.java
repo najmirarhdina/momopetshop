@@ -3,8 +3,8 @@ package com.management.momopetshop.service;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
-import com.management.momopetshop.UserAlreadyExistsException;
 import com.management.momopetshop.UserNotFoundException;
+import com.management.momopetshop.UserAlreadyExistsException;
 import com.management.momopetshop.model.Users;
 import com.management.momopetshop.repository.UsersRepository;
 
