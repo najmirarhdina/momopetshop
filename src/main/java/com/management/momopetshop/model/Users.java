@@ -17,12 +17,9 @@ public class Users {
     @Column(nullable = false, length = 255)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
-
-    // WAJIB: constructor kosong
-    public Users() {}
+    // constructor kosong (WAJIB)
+    public Users() {
+    }
 
     // getter & setter
     public Integer getIdUser() {
@@ -48,14 +45,4 @@ public class Users {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public Role getRole() {
-        return role;
-    }
- 
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }
-
-

@@ -7,7 +7,7 @@ import com.management.momopetshop.model.Users;
 import com.management.momopetshop.service.UsersService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UsersController {
 
     private final UsersService usersService;
@@ -40,11 +40,5 @@ public class UsersController {
         return usersService.createUser(user);
     }
 
-    // PUT update user
-    @PutMapping("/{id}")
-    public Users updateUser(@PathVariable Integer id, @RequestBody Users user) {
-        user.setIdUser(id);
-        return usersService.saveUser(user);
-    }
+    
 }
-

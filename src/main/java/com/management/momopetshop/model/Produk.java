@@ -15,34 +15,68 @@ public class Produk {
     @Column(name = "nama_produk", nullable = false)
     private String namaProduk;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false)
     private BigDecimal harga;
 
     @Column(nullable = false)
-    private int stok;
+    private Integer stok;
 
-    @Column(name = "id_kategori")
-    private Integer idKategori;
+    // relasi ke kategori
+    @ManyToOne
+    @JoinColumn(name = "id_kategori", nullable = false)
+    private Kategori kategori;
 
-    @Column(name = "id_supplier")
-    private Integer idSupplier;
+    // relasi ke supplier
+    @ManyToOne
+    @JoinColumn(name = "id_supplier", nullable = false)
+    private Supplier supplier;
 
-    // getter & setter
-    public Integer getIdProduk() { return idProduk; }
-    public void setIdProduk(Integer idProduk) { this.idProduk = idProduk; }
+    // ===== getter setter =====
+    public Integer getIdProduk() {
+        return idProduk;
+    }
 
-    public String getNamaProduk() { return namaProduk; }
-    public void setNamaProduk(String namaProduk) { this.namaProduk = namaProduk; }
+    public void setIdProduk(Integer idProduk) {
+        this.idProduk = idProduk;
+    }
 
-    public BigDecimal getHarga() { return harga; }
-    public void setHarga(BigDecimal harga) { this.harga = harga; }
+    public String getNamaProduk() {
+        return namaProduk;
+    }
 
-    public int getStok() { return stok; }
-    public void setStok(int stok) { this.stok = stok; }
+    public void setNamaProduk(String namaProduk) {
+        this.namaProduk = namaProduk;
+    }
 
-    public Integer getIdKategori() { return idKategori; }
-    public void setIdKategori(Integer idKategori) { this.idKategori = idKategori; }
+    public BigDecimal getHarga() {
+        return harga;
+    }
 
-    public Integer getIdSupplier() { return idSupplier; }
-    public void setIdSupplier(Integer idSupplier) { this.idSupplier = idSupplier; }
+    public void setHarga(BigDecimal harga) {
+        this.harga = harga;
+    }
+
+    public Integer getStok() {
+        return stok;
+    }
+
+    public void setStok(Integer stok) {
+        this.stok = stok;
+    }
+
+    public Kategori getKategori() {
+        return kategori;
+    }
+
+    public void setKategori(Kategori kategori) {
+        this.kategori = kategori;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
 }

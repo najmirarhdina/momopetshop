@@ -18,15 +18,6 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     open-in-view: false
 
-  springdoc:
-  api-docs:
-    enabled: true
-  swagger-ui:
-    enabled: true
-
-  server:
-  port: 8080
-
 
 
 

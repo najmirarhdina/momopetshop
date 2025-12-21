@@ -16,4 +16,3 @@ public interface UsersRepository extends JpaRepository<Users, Integer> {
     // cek apakah username sudah ada (buat validasi)
     boolean existsByUsername(String username);
 }
-

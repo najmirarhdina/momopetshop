@@ -1,38 +1,17 @@
-package com.management.momopetshop.model;
+package com.management.momopetshop.dto;
 
-import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Table(name = "transaksi")
-public class Transaksi {
+public class TransaksiResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_transaksi")
     private Integer idTransaksi;
-
-    @Column(name = "id_user", nullable = false)
     private Integer idUser;
-
-    @Column(nullable = false)
     private LocalDateTime tanggal;
-
-    @Column(nullable = false)
     private BigDecimal total;
+    private List<DetailTransaksiResponse> items;
 
-    // 🔑 INI KUNCI GET DETAIL
-    @OneToMany(
-        mappedBy = "transaksi", 
-        cascade = CascadeType.ALL, 
-        orphanRemoval = true,
-        fetch = FetchType.LAZY
-    )
-    private List<DetailTransaksi> detailTransaksi;
-
-    // ===== GETTER SETTER =====
     public Integer getIdTransaksi() {
         return idTransaksi;
     }
@@ -65,11 +44,11 @@ public class Transaksi {
         this.total = total;
     }
 
-    public List<DetailTransaksi> getDetailTransaksi() {
-        return detailTransaksi;
+    public List<DetailTransaksiResponse> getItems() {
+        return items;
     }
 
-    public void setDetailTransaksi(List<DetailTransaksi> detailTransaksi) {
-        this.detailTransaksi = detailTransaksi;
+    public void setItems(List<DetailTransaksiResponse> items) {
+        this.items = items;
     }
 }
