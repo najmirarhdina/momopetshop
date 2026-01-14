@@ -18,8 +18,13 @@ public class Produk {
     @Column(nullable = false)
     private BigDecimal harga;
 
+    /**
+     * stok TIDAK diinput manual
+     * default 0
+     * berubah dari stok_masuk & transaksi
+     */
     @Column(nullable = false)
-    private Integer stok;
+    private Integer stok = 0;
 
     // relasi ke kategori
     @ManyToOne
@@ -32,12 +37,9 @@ public class Produk {
     private Supplier supplier;
 
     // ===== getter setter =====
+
     public Integer getIdProduk() {
         return idProduk;
-    }
-
-    public void setIdProduk(Integer idProduk) {
-        this.idProduk = idProduk;
     }
 
     public String getNamaProduk() {
@@ -60,6 +62,10 @@ public class Produk {
         return stok;
     }
 
+    /**
+     * SETTER STOK SEBAIKNYA TIDAK DIPAKAI DARI CONTROLLER
+     * hanya untuk internal system
+     */
     public void setStok(Integer stok) {
         this.stok = stok;
     }

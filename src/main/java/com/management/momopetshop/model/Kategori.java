@@ -14,7 +14,7 @@ public class Kategori {
     @Column(name = "nama_kategori", nullable = false)
     private String namaKategori;
 
-    // getter setter
+    // ================= GETTER & SETTER =================
     public Integer getIdKategori() {
         return idKategori;
     }
@@ -29,5 +29,23 @@ public class Kategori {
 
     public void setNamaKategori(String namaKategori) {
         this.namaKategori = namaKategori;
+    }
+
+    // ================= CONSTRUCTORS =================
+    public Kategori() {
+        // Default constructor untuk JPA
+    }
+
+    public Kategori(String namaKategori) {
+        this.namaKategori = namaKategori;
+    }
+
+    // ================= TO STRING =================
+    @Override
+    public String toString() {
+        return "Kategori{" +
+                "idKategori=" + idKategori +
+                ", namaKategori='" + namaKategori + '\'' +
+                '}';
     }
 }

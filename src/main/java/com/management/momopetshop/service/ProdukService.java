@@ -1,5 +1,8 @@
 package com.management.momopetshop.service;
 
+import com.management.momopetshop.DataAlreadyExistsException;
+import com.management.momopetshop.DataImmutableException;
+import com.management.momopetshop.DataNotFoundException;
 import com.management.momopetshop.dto.ProdukRequest;
 import com.management.momopetshop.model.Kategori;
 import com.management.momopetshop.model.Produk;
@@ -7,6 +10,9 @@ import com.management.momopetshop.model.Supplier;
 import com.management.momopetshop.repository.KategoriRepository;
 import com.management.momopetshop.repository.ProdukRepository;
 import com.management.momopetshop.repository.SupplierRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,31 +34,56 @@ public class ProdukService {
         this.supplierRepository = supplierRepository;
     }
 
-    // ================= GET =================
+    // ================= GET ALL =================
     public List<Produk> findAll() {
         return produkRepository.findAll();
     }
 
-    public Produk findById(Integer id) {
-        return produkRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produk tidak ditemukan"));
+    // ================= GET ALL (PAGINATION) =================
+    public Page<Produk> findPagination(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return produkRepository.findAll(pageable);
     }
 
-    // ================= CREATE (DTO) =================
+    // ================= GET BY ID =================
+    public Produk findById(Integer id) {
+        return produkRepository.findById(id)
+                .orElseThrow(() ->
+                        new DataNotFoundException("Produk dengan ID " + id + " tidak ditemukan"));
+    }
+
+    // ================= CREATE =================
     public Produk save(ProdukRequest req) {
 
         Kategori kategori = kategoriRepository.findById(req.getIdKategori())
-                .orElseThrow(() -> new RuntimeException("Kategori tidak ditemukan"));
+                .orElseThrow(() ->
+                        new DataNotFoundException("Kategori tidak dapat ditemukan"));
 
         Supplier supplier = supplierRepository.findById(req.getIdSupplier())
-                .orElseThrow(() -> new RuntimeException("Supplier tidak ditemukan"));
+                .orElseThrow(() ->
+                        new DataNotFoundException("Supplier tidak dapat ditemukan"));
+
+        boolean exists = produkRepository
+                .existsByNamaProdukAndKategoriAndSupplier(
+                        req.getNamaProduk(), kategori, supplier);
+
+        if (exists) {
+            throw new DataAlreadyExistsException(
+                    "Produk dengan nama '" + req.getNamaProduk() +
+                    "', kategori '" + kategori.getNamaKategori() +
+                    "', dan supplier '" + supplier.getNamaSupplier() +
+                    "' sudah terdaftar"
+            );
+        }
 
         Produk produk = new Produk();
         produk.setNamaProduk(req.getNamaProduk());
         produk.setHarga(req.getHarga());
-        produk.setStok(req.getStok());
         produk.setKategori(kategori);
         produk.setSupplier(supplier);
+
+        // stok diatur sistem
+        produk.setStok(0);
 
         return produkRepository.save(produk);
     }
@@ -62,23 +93,43 @@ public class ProdukService {
 
         Produk produk = findById(id);
 
-        Kategori kategori = kategoriRepository.findById(req.getIdKategori())
-                .orElseThrow(() -> new RuntimeException("Kategori tidak ditemukan"));
+        if (!produk.getKategori().getIdKategori().equals(req.getIdKategori())) {
+            throw new DataImmutableException("ID kategori tidak boleh diubah");
+        }
 
-        Supplier supplier = supplierRepository.findById(req.getIdSupplier())
-                .orElseThrow(() -> new RuntimeException("Supplier tidak ditemukan"));
+        if (!produk.getSupplier().getIdSupplier().equals(req.getIdSupplier())) {
+            throw new DataImmutableException("ID supplier tidak boleh diubah");
+        }
+
+        boolean exists = produkRepository
+                .existsByNamaProdukAndKategoriAndSupplierAndIdProdukNot(
+                        req.getNamaProduk(),
+                        produk.getKategori(),
+                        produk.getSupplier(),
+                        id
+                );
+
+        if (exists) {
+            throw new DataAlreadyExistsException(
+                    "Produk dengan nama '" + req.getNamaProduk() +
+                    "', kategori '" + produk.getKategori().getNamaKategori() +
+                    "', dan supplier '" + produk.getSupplier().getNamaSupplier() +
+                    "' sudah terdaftar"
+            );
+        }
 
         produk.setNamaProduk(req.getNamaProduk());
         produk.setHarga(req.getHarga());
-        produk.setStok(req.getStok());
-        produk.setKategori(kategori);
-        produk.setSupplier(supplier);
 
         return produkRepository.save(produk);
     }
 
     // ================= DELETE =================
     public void delete(Integer id) {
+        if (!produkRepository.existsById(id)) {
+            throw new DataNotFoundException(
+                    "Produk dengan ID " + id + " tidak ditemukan");
+        }
         produkRepository.deleteById(id);
     }
 }

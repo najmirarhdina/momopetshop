@@ -4,7 +4,12 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "stok_masuk")
+@Table(
+    name = "stok_masuk",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id_produk", "id_supplier"})
+    }
+)
 public class StokMasuk {
 
     @Id
@@ -24,7 +29,8 @@ public class StokMasuk {
     @Column(nullable = false)
     private LocalDate tanggal;
 
-    // getter setter
+    // ================= GETTER & SETTER =================
+
     public Integer getIdStok() {
         return idStok;
     }
